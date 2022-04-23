@@ -16,7 +16,7 @@ exports.login = async (req, res) => {
     const [rows] = await db.execute(sql, [username])
     const data = rows[0]
     if (data && verifyingHash(password, data.password)) {
-      data.token = await signtoken({ emp_id: data.emp_id }, '30d')
+      data.token = await signtoken({ emp_id: data.emp_id }, '15d')
       delete data.password
       res.status(200).json(data)
     } else res.status(204).end()
@@ -37,6 +37,7 @@ exports.personal = async (req, res) => {
     //ดึงข้อมูล โดยส่งคำสั่ง SQL เข้าไป
     const [rows] = await db.execute(sql, [emp_id])
     const data = rows[0]
+    data.token = await signtoken({ emp_id: emp_id }, '15d')
     delete data.password
     res.status(200).json(data)
   } catch (error) {

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartfarm/models/employee_model.dart';
 
+import '../config/config.dart';
 import '../providers/employee_provider.dart';
 import 'home_page.dart';
 
@@ -155,17 +156,14 @@ class _LoginPageState extends State<LoginPage> {
       port: int.parse(dotenv.env['API_PORT']!),
       path: dotenv.env['API_PATH']! + 'login',
     );
-    Map<String, String> headers = {
-      "Content-Type": "application/x-www-form-urlencoded",
-      // "Content-type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    };
     try {
       await http
           .post(
             url,
             headers: headers,
-            body: {'username': username.text, 'password': password.text},
+            body: jsonEncode(
+              {'username': username.text, 'password': password.text},
+            ),
           )
           .timeout(Duration(seconds: 10))
           .then((request) => {
@@ -180,6 +178,8 @@ class _LoginPageState extends State<LoginPage> {
                         'token', json.decode(request.body)["token"]),
                     prefs.setBool('checkLogin', checkLogin),
                     // checkLogin
+                    headers!['Authorization'] =
+                        "bearer ${json.decode(request.body)["token"]}",
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(

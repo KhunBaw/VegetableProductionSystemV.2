@@ -40,7 +40,7 @@ class _HistoryPageState extends State<HistoryPage> {
           ),
         )
       ]),
-      drawer: const SideMenu(routeName: HistoryPage.routeName),
+      drawer: SideMenu(routeName: HistoryPage.routeName),
     );
   }
 }

@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/config.dart';
 import '../providers/employee_provider.dart';
 import '../views/alet_history_page.dart';
 import '../views/area_page.dart';
@@ -14,13 +16,33 @@ import '../views/login.dart';
 import '../views/order_page.dart';
 import '../views/planting_record_page.dart';
 
-class SideMenu extends StatelessWidget {
-  const SideMenu({
+class SideMenu extends StatefulWidget {
+  SideMenu({
     Key? key,
     this.routeName,
   }) : super(key: key);
 
   final String? routeName;
+
+  @override
+  State<SideMenu> createState() => _SideMenuState();
+}
+
+class _SideMenuState extends State<SideMenu> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  String getUrlImage(String name) {
+    Uri url = Uri(
+      scheme: 'http',
+      host: dotenv.env['API_HOST'],
+      port: int.parse(dotenv.env['API_PORT']!),
+      path: dotenv.env['API_PATH']! + 'employee/profile/' + name,
+    );
+    return url.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +54,17 @@ class SideMenu extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.symmetric(vertical: 20),
-            color: Colors.lightGreen,
+            decoration: BoxDecoration(
+              color: Colors.lightGreen,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15),
@@ -40,7 +72,11 @@ class SideMenu extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(
-                          "https://www.ninenik.com/images/ninenik_page_logo.jpg"),
+                        getUrlImage(
+                          context.watch<Employees>().item.empPhoto!,
+                        ),
+                        headers: headers,
+                      ),
                       backgroundColor: Colors.white,
                       radius: 40,
                     ),
@@ -181,12 +217,12 @@ class SideMenu extends StatelessWidget {
   ListTile routeItem(BuildContext context, Widget? leading, String name,
       String routeItemName) {
     return ListTile(
-      selected: routeName == routeItemName,
+      selected: widget.routeName == routeItemName,
       selectedColor: Colors.lightGreen,
       leading: leading,
       title: Text(name),
       onTap: () {
-        routeName == routeItemName
+        widget.routeName == routeItemName
             ? Navigator.pop(context, true)
             : Navigator.pushReplacementNamed(context, routeItemName);
       },

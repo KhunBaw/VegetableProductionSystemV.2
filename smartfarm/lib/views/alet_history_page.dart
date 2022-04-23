@@ -40,7 +40,7 @@ class _AletHistoryState extends State<AletHistory> {
           ),
         )
       ]),
-      drawer: const SideMenu(routeName: AletHistory.routeName),
+      drawer: SideMenu(routeName: AletHistory.routeName),
     );
   }
 }

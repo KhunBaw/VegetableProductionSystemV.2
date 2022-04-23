@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/config.dart';
 import '../models/employee_model.dart';
 import '../providers/employee_provider.dart';
 import 'home_page.dart';
@@ -64,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
       port: int.parse(dotenv.env['API_PORT']!),
       path: dotenv.env['API_PATH']! + 'login',
     );
-    Map<String, String> headers = {
+    Map<String, String> header = {
       "Content-Type": "application/x-www-form-urlencoded",
       "Content-type": "application/json",
       // Authorize Header
@@ -73,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     try {
       changeStatus('กำลังเช็ค Token');
-      await http.get(url, headers: headers).timeout(
+      await http.get(url, headers: header).timeout(
         const Duration(seconds: 15),
         onTimeout: () async {
           changeStatus('หมดเวลาการเชื่อมต่อ\nไม่สามารถเชื่อมต่อเซิฟเวอร์ได้');
@@ -83,6 +84,8 @@ class _SplashScreenState extends State<SplashScreen> {
             if (request.statusCode == 200)
               {
                 changeStatus('Token ผ่านการตรวจสอบ'),
+                prefs.setString('token', json.decode(request.body)["token"]),
+                headers = header,
                 print('ล็อคอินสำเร็จ'),
                 context
                     .read<Employees>()

@@ -21,6 +21,7 @@ class _PlantingRecordState extends State<PlantingRecord> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('บันทึกการปลูก'),
+        // elevation: 0,
       ),
       backgroundColor: Colors.lightBlue,
       body: Stack(alignment: AlignmentDirectional.center, children: [
@@ -45,7 +46,7 @@ class _PlantingRecordState extends State<PlantingRecord> {
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   elevation: 10,
                   primary: Colors.white,
                   onPrimary: Colors.lightGreen,
@@ -70,16 +71,16 @@ class _PlantingRecordState extends State<PlantingRecord> {
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(text: '123456789'),
                           ])),
-                      // RichText(
-                      //     text: TextSpan(
-                      //         style:
-                      //             TextStyle(fontSize: 16, color: Colors.blue),
-                      //         children: [
-                      //       TextSpan(
-                      //           text: 'คำสั่งซื้อ : ',
-                      //           style: TextStyle(fontWeight: FontWeight.bold)),
-                      //       TextSpan(text: '123456789'),
-                      //     ])),
+                      RichText(
+                          text: TextSpan(
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.blue),
+                              children: [
+                            TextSpan(
+                                text: 'คำสั่งซื้อ : ',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: '123456789'),
+                          ])),
                       SizedBox(
                         height: 5,
                       ),
@@ -151,7 +152,7 @@ class _PlantingRecordState extends State<PlantingRecord> {
           ),
         )
       ]),
-      drawer: const SideMenu(routeName: PlantingRecord.routeName),
+      drawer: SideMenu(routeName: PlantingRecord.routeName),
     );
   }
 }

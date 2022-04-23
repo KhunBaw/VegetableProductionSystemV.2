@@ -40,7 +40,7 @@ class _AreaPageState extends State<AreaPage> {
           ),
         )
       ]),
-      drawer: const SideMenu(routeName: AreaPage.routeName),
+      drawer: SideMenu(routeName: AreaPage.routeName),
     );
   }
 }

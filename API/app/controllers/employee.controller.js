@@ -1,18 +1,15 @@
 const validate_req = require('../models/validate_req.models')
 const db = require('../config/db')
 const { hashPassword } = require('../models/hashing.models')
+const fs = require('fs')
+const { promisify } = require('util')
+const unlinkAsync = promisify(fs.unlink)
+const { getPathImage } = require('../models/upload.models')
 
 exports.create = async (req, res) => {
   //ดึงข้อมูลจาก request
-  const {
-    username,
-    password,
-    emp_name,
-    emp_phnum,
-    emp_address,
-    emp_photo,
-    emp_position,
-  } = req.body
+  const { username, password, emp_name, emp_phnum, emp_address, emp_position } =
+    req.body
   //ตรวจสอบความถูกต้อง request
   if (validate_req(req, res, [username, password, emp_name])) return
   //คำสั่ง SQL
@@ -25,15 +22,18 @@ exports.create = async (req, res) => {
       emp_name,
       emp_phnum,
       emp_address,
-      emp_photo || 'default.png',
+      req.file.filename || 'default.png',
       emp_position,
     ])
     if (rows.affectedRows != 0) res.status(204).end()
-    else
+    else {
+      await unlinkAsync(req.file.path)
       res.status(400).json({
         message: 'เพิ่มไม่สำเร็จ',
       })
+    }
   } catch (error) {
+    await unlinkAsync(req.file.path)
     if (error.errno == 1062) {
       res.status(400).json({
         message: error.message,
@@ -120,4 +120,10 @@ exports.deleteOne = async (req, res) => {
   } catch (error) {
     res.status(400).send(error)
   }
+}
+
+exports.profile = async (req, res) => {
+  const { name } = req.params
+  const file = getPathImage('profile', name)
+  res.status(200).sendFile(file)
 }

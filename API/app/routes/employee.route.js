@@ -1,9 +1,10 @@
 module.exports = (app) => {
   const router = require('express').Router()
-  const { verifytoken } = require('../models/middleware.models.js')
-  const { create,findAll,findOne,update,deleteOne } = require('../controllers/employee.controller')
+  const { verifytoken } = require('../models/middleware.models')
+  const { create,findAll,findOne,update,deleteOne,profile } = require('../controllers/employee.controller')
+  const {upload} = require('../models/upload.models')
 
-  router.post('/',verifytoken, create)
+  router.post('/',verifytoken,upload.single('profile'), create)
 
   router.get('/',verifytoken,findAll)
 
@@ -11,7 +12,9 @@ module.exports = (app) => {
 
   router.put('/:id',verifytoken, update)
 
-  // router.delete('/:id',verifytoken, deleteOne)
+  router.delete('/:id',verifytoken, deleteOne)
+
+  router.get('/profile/:name',verifytoken,profile)
 
   //เซ็ต PREFIX
   app.use(process.env.PREFIX + '/employee', router)

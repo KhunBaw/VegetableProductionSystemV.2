@@ -40,7 +40,7 @@ class _OrderPageState extends State<OrderPage> {
           ),
         )
       ]),
-      drawer: const SideMenu(routeName: OrderPage.routeName),
+      drawer: SideMenu(routeName: OrderPage.routeName),
     );
   }
 }
