@@ -52,7 +52,9 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   chackLogin() async {
+    changeStatus('เริ่มต้นเช็คการล็อคอิน');
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    changeStatus('ดึงข้อมูลล็อคอิน');
     bool? checkLogin = prefs.getBool('checkLogin');
     checkLogin ??= false;
     if (!checkLogin) return start(false);

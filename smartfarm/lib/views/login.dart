@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -44,77 +46,80 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 40),
-              // ignore: prefer_const_literals_to_create_immutables
-              child: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/mobile_login.svg',
-                    height: 200,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    'เข้าสู่ระบบ',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Form(
-                      child: Column(
-                        children: [
-                          textformlogin('ชื่อผู้ใช้', username, false),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          textformlogin('รหัสผ่าน', password, true),
-                          Row(
-                            children: [
-                              Checkbox(
-                                activeColor: Colors.lightGreen,
-                                value: checkLogin,
-                                onChanged: (value) => setState(() {
-                                  checkLogin = value!;
-                                }),
-                              ),
-                              Text(
-                                'บันทึกเข้าสู่ระบบ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+      body: Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: kIsWeb ? 500 : MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40),
+                // ignore: prefer_const_literals_to_create_immutables
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/mobile_login.svg',
+                      height: 200,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'เข้าสู่ระบบ',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Form(
+                        child: Column(
+                          children: [
+                            textformlogin('ชื่อผู้ใช้', username, false),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            textformlogin('รหัสผ่าน', password, true),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: Colors.lightGreen,
+                                  value: checkLogin,
+                                  onChanged: (value) => setState(() {
+                                    checkLogin = value!;
+                                  }),
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
+                                Text(
+                                  'บันทึกเข้าสู่ระบบ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await login();
-                    },
-                    child: Text('เข้าสู่ระบบ'),
-                    style: ElevatedButton.styleFrom(
-                      textStyle:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      primary: Colors.lightGreen,
-                      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await login();
+                      },
+                      child: Text('เข้าสู่ระบบ'),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                        primary: Colors.lightGreen,
+                        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

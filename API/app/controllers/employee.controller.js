@@ -25,7 +25,7 @@ exports.create = async (req, res) => {
       req.file.filename || 'default.png',
       emp_position,
     ])
-    if (rows.affectedRows != 0) res.status(204).end()
+    if (rows.affectedRows != 0) res.status(201).end()
     else {
       await unlinkAsync(req.file.path)
       res.status(400).json({

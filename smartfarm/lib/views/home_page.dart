@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,12 +25,12 @@ class _HomePageState extends State<HomePage> {
           'หน้าแรก',
         ),
       ),
-      body: Stack(children: [
+      body: Stack(alignment: Alignment.center, children: [
         Positioned(
           bottom: 0,
           child: SvgPicture.asset(
             'assets/images/image_bg.svg',
-            width: MediaQuery.of(context).size.width,
+            width: kIsWeb ? 800 : MediaQuery.of(context).size.width,
           ),
         ),
         RefreshIndicator(
@@ -37,11 +38,11 @@ class _HomePageState extends State<HomePage> {
             await Future.delayed(Duration(seconds: 2));
           },
           color: Colors.lightGreen,
-          child: ListView(
+          child: GridView.extent(
+            maxCrossAxisExtent: MediaQuery.of(context).size.width,
+            childAspectRatio: 2.5,
             physics: AlwaysScrollableScrollPhysics(),
-
             padding: const EdgeInsets.only(top: 10, bottom: 20),
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               itemContainer(
                 [
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
   Container itemContainer(
       List<Color> colors, Widget icon, String? text1, String? text2) {
     return Container(
-      height: 150,
+      // height: 150,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
